@@ -1,3 +1,5 @@
+from sensor import Sensor
+
 # Copyright (c) 2015 "aldarionsevero Lucas Severo Alves
 # <lucassalves65@gmail.com>""
 
@@ -18,3 +20,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+
+class Mq9Sensor(Sensor):
+
+    """docstring for Mq9Sensor"""
