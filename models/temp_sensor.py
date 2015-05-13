@@ -1,4 +1,3 @@
-from sensor import Sensor
 
 
 # Copyright (c) 2015 "aldarionsevero Lucas Severo Alves
@@ -23,6 +22,9 @@ from sensor import Sensor
 # SOFTWARE.
 
 # DS18B20 temperature sensor, digital output
+from sensor import Sensor
+
+
 class TempSensor(Sensor):
 
     """docstring for TempSensor"""
