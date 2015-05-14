@@ -8,13 +8,17 @@ from datetime import datetime as dt
 import logging
 import random
 
+a = [0, 0]
+x = []
+y = []
+
 
 class MainView(QDialog, QWidget):
 
     def __init__(self):
         super(MainView, self).__init__()
         self.time_UI = 5
-        # self.init_ui()
+        self.init_ui()
         self.plot()
         self.time = 0
 
@@ -27,18 +31,17 @@ class MainView(QDialog, QWidget):
         root = path.dirname(path.abspath(__file__))
         handler = logging.FileHandler('%s/Logs/__%s.log' % (root, day))
 
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
         # define a logging format
         formatter = logging.Formatter('%(asctime)s - %(message)s')
         handler.setFormatter(formatter)
         # add the handlers to the logger
-        logger.addHandler(handler)
-        return logger
+        self.logger.addHandler(handler)
 
     def update(self):
-        global color, x, y, z
+        global color, x, y, a
         a[0] = self.time + 1
         a[1] = random.randint(10, 200)
         loaded = "time:" + str(a[0]) + "temp:" + str(a[1])
@@ -47,48 +50,41 @@ class MainView(QDialog, QWidget):
             y.append(a[1])
             # z.append(a[2])
             print a
-            logger.info(loaded)
-        except IncompleteCaptureError:
-            # print loaded
-            pass
+            self.logger.info(loaded)
         except Exception, e:
             raise e
 
         # if len(x) > 100:
         x = x[1:]
-        p.setData(x)
+        self.p.setData(x)
 
         if len(y) > 100:
             y = y[1:]
-        q.setData(y)
+        self.q.setData(y)
 
         # if len(z) > 100:
         #    z = z[1:]
         # r.setData(z)
     def plot(self):
-        logger = self.build_logger('plot')
-        win = pg.GraphicsWindow()
-        win.setWindowTitle('Scrolling Plots')
+        self.build_logger('plot')
+        self.win = pg.GraphicsWindow()
+        self.win.setWindowTitle('Scrolling Plots')
 
         x = range(10)
         y = range(10)
-        plot_widgetx = win.addPlot()
+        plot_widgetx = self.win.addPlot()
         plot_widgetx.setRange(yRange=[0, 100])
-        p = plot_widgetx.plot(x, y)
+        self.p = plot_widgetx.plot(x, y)
 
-        win.nextRow()
-        plot_widgety = win.addPlot()
+        self.win.nextRow()
+        plot_widgety = self.win.addPlot()
         plot_widgety.setRange(yRange=[10, 200])
-        q = plot_widgety.plot(x, y)
+        self.q = plot_widgety.plot(x, y)
 
         # win.nextRow()
         # plotWidgetz = win.addPlot()
         # plotWidgetz.setRange(yRange=[300, 550])
         # r = plotWidgetz.plot(x, y)
-
-        timer = QtCore.QTimer()
-        timer.timeout.connect(self.update)
-        timer.start(1)
 
     def init_ui(self):
 
@@ -96,7 +92,7 @@ class MainView(QDialog, QWidget):
         self.btn.move(20, 20)
         self.btn.clicked.connect(self.time_button)
 
-        self.btn = QPushButton('START', self)
+        self.btn = QPushButton('QUIT', self)
         self.btn.move(20, 80)
         self.btn.clicked.connect(self.start)
 
@@ -112,4 +108,4 @@ class MainView(QDialog, QWidget):
             print self.time_UI
 
     def start(self):
-        pass
+        exit(0)
