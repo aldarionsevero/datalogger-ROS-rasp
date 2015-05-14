@@ -26,7 +26,6 @@ class MainView(QDialog, QWidget):
         self.main_menu()
 
         self.timer = QtCore.QTimer()
-
         self.plot()
 
     def build_logger(self, name):
@@ -153,40 +152,6 @@ class MainView(QDialog, QWidget):
         self.setGeometry(300, 300, 300, 300)
         self.setWindowTitle('Data Logger')
         self.show()
-
-    def top_menu(self):
-        self.file_menu = self.menuBar().addMenu("&File")
-
-        selectport_action = self.create_action("Open log folder",
-                                               shortcut="Ctrl+P",
-                                               # slot=self.on_select_port,
-                                               tip="Select a COM port")
-        self.start_action = self.create_action("&Stop",
-                                               shortcut="Ctrl+M",
-                                               slot=self.on_start,
-                                               tip="Start the data monitor")
-        self.stop_action = self.create_action("&Stop monitor",
-                                              shortcut="Ctrl+T",
-                                              slot=self.on_stop,
-                                              tip="Stop the data monitor")
-        exit_action = self.create_action("E&xit", slot=self.close,
-                                         shortcut="Ctrl+X",
-                                         tip="Exit the application")
-
-        self.start_action.setEnabled(False)
-        self.stop_action.setEnabled(False)
-
-        self.add_actions(self.file_menu,
-                         (selectport_action, self.start_action,
-                          self.stop_action,
-                          None, exit_action))
-
-        self.help_menu = self.menuBar().addMenu("&Help")
-        about_action = self.create_action("&About",
-                                          shortcut='F1', slot=self.on_about,
-                                          tip='About the monitor')
-
-        self.add_actions(self.help_menu, (about_action,))
 
     def set_delay(self):
 
