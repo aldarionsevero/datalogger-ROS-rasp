@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2015 "aldarionsevero Lucas Severo Alves
 # <lucassalves65@gmail.com>""
 
@@ -19,9 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from gas_sensor import GasSensor
+from sensor import Sensor
+import botbook_gpio as gpio
+import botbook_mcp3002 as mcp
 
 
-class Mq135Sensor(GasSensor):
+class GasSensor(Sensor):  # Inherit from correct model to orm framework
 
-    """docstring for Mq135_sensor"""
+    """docstring for Sensor"""
+
+    def __init__(self):
+        super(GasSensor, self).__init__()
+        self.sense_pin1 = 0
+        self.sense_pin2 = 0
+        self.sense_pin3 = 0
+        self.sense_pin4 = 0
+        self.sensor_level = 0
+
+    def read_from_mcp_ad(self):
+        self.sensor_level = mcp.readAnalog()
+
+    # TODO
+    def read_from_gpio_pins(self):
+        pass

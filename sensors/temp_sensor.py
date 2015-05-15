@@ -22,9 +22,15 @@
 # SOFTWARE.
 
 # DS18B20 temperature sensor, digital output
+
+
 from sensor import Sensor
 
 
 class TempSensor(Sensor):
 
     """docstring for TempSensor"""
+
+    def __init__(self):
+        Sensor.__init__(self)
+        self.sense_pin1 = 22

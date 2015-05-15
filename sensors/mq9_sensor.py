@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from sensor import Sensor
+from gas_sensor import GasSensor
 
 
-class Mq9Sensor(Sensor):
+class Mq9Sensor(GasSensor):
 
     """docstring for Mq9Sensor"""

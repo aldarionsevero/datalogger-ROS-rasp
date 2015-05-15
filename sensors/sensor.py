@@ -20,7 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import botbook_gpio as gpio
+
 
 class Sensor():  # Inherit from correct model to orm framework
 
     """docstring for Sensor"""
+
+    sense_pin1 = 0
+    sense_pin2 = 0
+    sense_pin3 = 0
+    sense_pin4 = 0
+    sensor_level = 0
+    gain = 1000
+
+    def __init__(self):
+        self.sense_pin1 = 0
+        self.sense_pin2 = 0
+        self.sense_pin3 = 0
+        self.sense_pin4 = 0
+        self.sensor_level = 0
+
+    def read_pin(self, pin):
+        gpio.mode(pin, "in")
+        gpio.interruptMode(pin, "both")
+        return gpio.pulseInHigh(pin) * self.gain
