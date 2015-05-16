@@ -33,4 +33,13 @@ class TempSensor(Sensor):
 
     def __init__(self):
         Sensor.__init__(self)
-        self.sense_pin1 = 22
+        self.sense_pin1 = 22  # pin 15 rasp
+        self.gain = 600
+        # self.gain =
+        self.gain_plus = 150
+
+    def read_sensor(self):
+        return self.read_pin(self.sense_pin1)
+
+    def read_new_gain(self):
+        return self.read_gain_plus(self.gain_plus)

@@ -26,6 +26,8 @@ from pyqtgraph.Qt import QtGui, QtCore
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+from sensors.temp_sensor import TempSensor
+
 import pyqtgraph as pg
 # from time import sleep
 from datetime import datetime as dt
@@ -35,6 +37,8 @@ import sys
 
 inputs = [0, 0, 0, 0]
 inputs_str = ['', '', '', '']
+
+temp_sensor = TempSensor()
 
 temperature = []
 gas8 = []
@@ -72,7 +76,7 @@ class MainView(QDialog, QWidget):
     def update(self):
         global color, temperature, gas8, gas9, inputs
 
-        inputs[0] = random.randint(0, 100)
+        inputs[0] = temp_sensor.read_sensor()
         inputs[1] = random.randint(0, 100)
         inputs[2] = random.randint(0, 100)
         # sleep(self.delay_time)
