@@ -45,5 +45,5 @@ class TempSensor(Sensor):
     # def read_new_gain(self):
     #     return self.read_gain_plus(self.gain_plus)
     def read_sensor(self):
-        temp = DS18B20Read
+        temp = DS18B20Read()
         return temp.temp_from_device
