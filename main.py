@@ -50,7 +50,7 @@ class MainView(QDialog, QWidget):
     def __init__(self):
         super(MainView, self).__init__()
         self.delay_time = 0.02
-        self.main_menu()
+        # self.main_menu()
 
         self.timer = QtCore.QTimer()
         # self.plot()
