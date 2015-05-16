@@ -22,7 +22,7 @@
 
 import botbook_gpio as gpio
 
-import botbook_mcp3002 as mcp
+# import botbook_mcp3002 as mcp
 
 
 class Sensor():  # Inherit from correct model to orm framework
@@ -50,8 +50,8 @@ class Sensor():  # Inherit from correct model to orm framework
     #     gpio.interruptMode(pin, "both")
     #     return gpio.read(pin) * self.gain
 
-    def read_from_mcp_ad(self):
-        self.sensor_level = mcp.readAnalog()
+    # def read_from_mcp_ad(self):
+    #     self.sensor_level = mcp.readAnalog()
 
     # TODO
     def read_from_gpio_pins(self):

@@ -34,6 +34,8 @@ from datetime import datetime as dt
 import logging
 import random
 import sys
+import optparse
+from time import sleep
 
 inputs = [0, 0, 0, 0]
 inputs_str = ['', '', '', '']
@@ -49,7 +51,7 @@ class MainView(QDialog, QWidget):
 
     def __init__(self):
         super(MainView, self).__init__()
-        self.delay_time = 0.02
+        self.delay_time = 0.08
         self.main_menu()
 
         self.timer = QtCore.QTimer()
@@ -77,6 +79,7 @@ class MainView(QDialog, QWidget):
         global color, temperature, gas8, gas9, inputs
 
         inputs[0] = temp_sensor.read_sensor()
+        # inputs[0] = temp_sensor.read_new_gain()
         inputs[1] = random.randint(0, 100)
         inputs[2] = random.randint(0, 100)
         # sleep(self.delay_time)
@@ -186,7 +189,7 @@ class MainView(QDialog, QWidget):
                                                      'Time',
                                                      'Enter the \
                                                       dealy time (s): ',
-                                                     0.02,
+                                                     0.08,
                                                      decimals=2)
         if ok:
             print self.delay_time
@@ -195,10 +198,94 @@ class MainView(QDialog, QWidget):
     def quit(self):
         exit(0)
 
+# TODO take this out of this file... make is work
+
+
+class Terminal(object):
+
+    """docstring for Terminal"""
+
+    delay_time = 0.08
+    logger = logging.getLogger(__name__)
+
+    def __init__(self):
+        super(Terminal, self).__init__()
+        self.print_sensor_readings()
+
+    def build_logger(self, name):
+        """ Method to build the logger's handler """
+    # name = dt.strftime("%A, %d. %B %Y %I:%M%p")
+        day = dt.now().strftime("%A, %d. %B %Y - %H_%M")
+        from os import path
+
+        root = path.dirname(path.abspath(__file__))
+        handler = logging.FileHandler('%s/Logs/__%s.log' % (root, day))
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+
+        # define a logging format
+        formatter = logging.Formatter('%(asctime)s - %(message)s')
+        handler.setFormatter(formatter)
+        # add the handlers to the logger
+        self.logger.addHandler(handler)
+
+    def print_sensor_readings(self):
+        while 1:
+            self.build_logger('plot')
+            global color, temperature, gas8, gas9, inputs
+
+            inputs[0] = temp_sensor.read_sensor()
+            # inputs[0] = temp_sensor.read_new_gain()
+            inputs[1] = random.randint(0, 100)
+            inputs[2] = random.randint(0, 100)
+            # sleep(self.delay_time)
+
+            inputs_str[0] = 'Temperature: ' + str(inputs[0])
+            inputs_str[1] = 'Gas mq8: ' + str(inputs[1])
+            inputs_str[2] = 'Gas mq9: ' + str(inputs[2])
+
+            loaded = "temp: " + \
+                str(inputs[0]) + " gas8: " + \
+                str(inputs[1]) + " gas9: " + str(inputs[2])
+
+            temperature.append(inputs[0])
+            gas8.append(inputs[1])
+            gas9.append(inputs[2])
+            # print inputs
+            self.logger.info(loaded)
+
+            if len(temperature) > 100:
+                temperature = temperature[1:]
+
+            if len(gas8) > 100:
+                gas8 = gas8[1:]
+
+            if len(gas9) > 100:
+                gas9 = gas9[1:]
+
+            print inputs_str
+            sleep(self.delay_time)
+
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    main_view = MainView()
-    main_view.timer.timeout.connect(main_view.update)
-    main_view.timer.start(int(main_view.delay_time * 1000))
-    main_view.exec_()
+    sys.stdout.flush()
+    parser = optparse.OptionParser(
+        usage="%prog [options]",
+        description="Datalogger"
+    )
+    parser.add_option("-t", "--terminal",
+                      dest="terminal",
+                      action="store_true",
+                      help="Runs on terminal only",
+                      default=False
+                      )
+    (options, args) = parser.parse_args()
+    if options.terminal:
+        tm = Terminal()
+    else:
+        app = QApplication(sys.argv)
+        main_view = MainView()
+        main_view.timer.timeout.connect(main_view.update)
+        main_view.timer.start(int(main_view.delay_time * 1000))
+        main_view.exec_()
