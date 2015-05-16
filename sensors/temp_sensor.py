@@ -35,7 +35,7 @@ class TempSensor(Sensor):
         Sensor.__init__(self)
         self.sense_pin1 = 22  # pin 15 rasp
         self.gain = 600
-        # self.gain =
+        self.gain = float(1 / 1000)
         self.gain_plus = 150
 
     def read_sensor(self):

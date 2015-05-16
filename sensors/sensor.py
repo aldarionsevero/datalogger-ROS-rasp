@@ -32,7 +32,7 @@ class Sensor():  # Inherit from correct model to orm framework
     sense_pin3 = 0
     sense_pin4 = 0
     sensor_level = 0
-    gain = float(1 / 1000)
+    gain = 1000
     gain_read = 0
     gain_plus = 0
 
@@ -46,7 +46,7 @@ class Sensor():  # Inherit from correct model to orm framework
     def read_pin(self, pin):
         gpio.mode(pin, "in")
         gpio.interruptMode(pin, "both")
-        return gpio.pulseInHigh(pin) * self.gain
+        return gpio.read(pin) * self.gain
 
     def read_gain_plus(self, plus):
         gain_read = self.gain + plus
