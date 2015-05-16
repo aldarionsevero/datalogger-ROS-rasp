@@ -53,7 +53,7 @@ class MainView(QDialog, QWidget):
         self.main_menu()
 
         self.timer = QtCore.QTimer()
-        self.plot()
+        # self.plot()
 
     def build_logger(self, name):
         """ Method to build the logger's handler """
