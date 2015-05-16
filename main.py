@@ -92,26 +92,26 @@ class MainView(QDialog, QWidget):
         temperature.append(inputs[0])
         gas8.append(inputs[1])
         gas9.append(inputs[2])
-        # print inputs
-        self.logger.info(loaded)
+        print inputs_str
+        # self.logger.info(loaded)
 
         if len(temperature) > 100:
             temperature = temperature[1:]
-        self.p.setData(temperature)
+        # self.p.setData(temperature)
 
         self.lbl_temperature.setText(inputs_str[0])
         self.lbl_temperature.adjustSize()
 
         if len(gas8) > 100:
             gas8 = gas8[1:]
-        self.q.setData(gas8)
+        # self.q.setData(gas8)
 
         self.lbl_gas8.setText(inputs_str[1])
         self.lbl_gas8.adjustSize()
 
         if len(gas9) > 100:
             gas9 = gas9[1:]
-        self.r.setData(gas9)
+        # self.r.setData(gas9)
 
         self.lbl_gas9.setText(inputs_str[2])
         self.lbl_gas9.adjustSize()
