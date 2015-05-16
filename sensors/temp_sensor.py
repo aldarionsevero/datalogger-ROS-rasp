@@ -26,20 +26,23 @@
 
 from sensor import Sensor
 
+from temp_DS18B20_read import DS18B20Read
 
-class TempSensor(Sensor):
+
+class TempSensor(Sensor, DS18B20Read):
 
     """docstring for TempSensor"""
 
     def __init__(self):
         Sensor.__init__(self)
-        self.sense_pin1 = 22  # pin 15 rasp
-        self.gain = 600
+        self.sense_pin1 = 0  # pin 7 rasp
         self.gain = float(1 / 1000)
-        self.gain_plus = 150
+        # self.gain_plus = 150
 
+    # def read_sensor(self):
+    #     return self.read_pin(self.sense_pin1)
+
+    # def read_new_gain(self):
+    #     return self.read_gain_plus(self.gain_plus)
     def read_sensor(self):
-        return self.read_pin(self.sense_pin1)
-
-    def read_new_gain(self):
-        return self.read_gain_plus(self.gain_plus)
+        return self.temp_from_device
