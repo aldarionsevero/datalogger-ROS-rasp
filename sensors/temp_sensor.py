@@ -29,7 +29,7 @@ from sensor import Sensor
 from temp_DS18B20_read import DS18B20Read
 
 
-class TempSensor(Sensor, DS18B20Read):
+class TempSensor(Sensor):
 
     """docstring for TempSensor"""
 
@@ -45,4 +45,5 @@ class TempSensor(Sensor, DS18B20Read):
     # def read_new_gain(self):
     #     return self.read_gain_plus(self.gain_plus)
     def read_sensor(self):
-        return self.temp_from_device
+        temp = DS18B20Read
+        return temp.temp_from_device
