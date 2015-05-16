@@ -26,8 +26,6 @@
 
 from sensor import Sensor
 
-from temp_DS18B20_read import DS18B20Read
-
 
 class TempSensor(Sensor):
 
@@ -45,5 +43,11 @@ class TempSensor(Sensor):
     # def read_new_gain(self):
     #     return self.read_gain_plus(self.gain_plus)
     def read_sensor(self):
-        temp = DS18B20Read()
-        return temp.temp_from_device
+        tempfile = open("/sys/bus/w1/devices/28-001451f4e2ff/w1_slave")
+        file_content = tempfile.read()
+        tempfile.close()
+        tempdata = file_content.split("\n")[1].split(" ")[9]
+        temperature = float(tempdata[2:])
+        temperature = temperature / 1000
+        return temperature
+        #
