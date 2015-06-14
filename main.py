@@ -27,6 +27,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 from sensors.temp_sensor import TempSensor
+from sensors.mq9_sensor import Mq9Sensor
 
 import pyqtgraph as pg
 # from time import sleep
@@ -40,7 +41,9 @@ from time import sleep
 inputs = [0, 0, 0, 0]
 inputs_str = ['', '', '', '']
 
+
 temp_sensor = TempSensor()
+mq9_sensor = Mq9Sensor()
 
 temperature = []
 gas8 = []
@@ -79,9 +82,9 @@ class MainView(QDialog, QWidget):
         global color, temperature, gas8, gas9, inputs
 
         inputs[0] = temp_sensor.read_sensor()
-        # inputs[0] = temp_sensor.read_new_gain()
+        # inputs[0] = random.randint(23, 26)
         inputs[1] = random.randint(0, 100)
-        inputs[2] = random.randint(0, 100)
+        inputs[2] = mq9_sensor.read_sensor()
         # sleep(self.delay_time)
 
         inputs_str[0] = 'Temperature: ' + str(inputs[0])
@@ -122,6 +125,7 @@ class MainView(QDialog, QWidget):
         # if len(z) > 100:
         #    z = z[1:]
         # r.setData(z)
+
     def plot(self):
         self.build_logger('plot')
         self.win = pg.GraphicsWindow()
@@ -132,7 +136,7 @@ class MainView(QDialog, QWidget):
         gas9 = range(10)
 
         plot_widget_temperature = self.win.addPlot()
-        plot_widget_temperature.setRange(xRange=[0, 100])
+        plot_widget_temperature.setRange(xRange=[0, 100], yRange=[10, 80])
         self.p = plot_widget_temperature.plot(temperature, gas8, gas9)
 
         self.win.nextRow()
@@ -185,10 +189,9 @@ class MainView(QDialog, QWidget):
 
     def set_delay(self):
 
-        self.delay_time, ok = QInputDialog.getDouble(self,
-                                                     'Time',
-                                                     'Enter the \
-                                                      dealy time (s): ',
+        self.delay_time, ok = QInputDialog.getDouble(self, 'Time',
+                                                     'Enter the dealy \
+                                                     time (s): ',
                                                      0.08,
                                                      decimals=2)
         if ok:
@@ -236,7 +239,7 @@ class Terminal(object):
             global color, temperature, gas8, gas9, inputs
 
             inputs[0] = temp_sensor.read_sensor()
-            # inputs[0] = temp_sensor.read_new_gain()
+            # inputs[0] = random.randint(23, 26)
             inputs[1] = random.randint(0, 100)
             inputs[2] = random.randint(0, 100)
             # sleep(self.delay_time)
