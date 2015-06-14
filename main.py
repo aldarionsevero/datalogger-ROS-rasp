@@ -136,7 +136,7 @@ class MainView(QDialog, QWidget):
         gas9 = range(10)
 
         plot_widget_temperature = self.win.addPlot()
-        plot_widget_temperature.setRange(xRange=[0, 100], yRange=[10, 80])
+        plot_widget_temperature.setRange(xRange=[0, 100])
         self.p = plot_widget_temperature.plot(temperature, gas8, gas9)
 
         self.win.nextRow()
