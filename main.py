@@ -28,6 +28,7 @@ from PyQt4.QtGui import *
 
 from sensors.temp_sensor import TempSensor
 from sensors.mq9_sensor import Mq9Sensor
+from sensors.mq135_sensor import Mq135Sensor
 
 import pyqtgraph as pg
 # from time import sleep
@@ -44,8 +45,10 @@ inputs_str = ['', '', '', '']
 
 temp_sensor = TempSensor()
 mq9_sensor = Mq9Sensor()
+mq135_sensor = Mq135Sensor()
 
 temperature = []
+gas135 = []
 gas8 = []
 gas9 = []
 
@@ -79,25 +82,32 @@ class MainView(QDialog, QWidget):
         self.logger.addHandler(handler)
 
     def update(self):
-        global color, temperature, gas8, gas9, inputs
+        global color, temperature, gas135, gas8, gas9, inputs
 
         inputs[0] = temp_sensor.read_sensor()
-        # inputs[0] = random.randint(23, 26)
-        inputs[1] = random.randint(0, 100)
-        inputs[2] = mq9_sensor.read_sensor()
-        # sleep(self.delay_time)
+        inputs[1] = mq135_sensor.read_sensor()
+        inputs[2] = mq8_sensor.read_sensor()
+        inputs[3] = mq9_sensor.read_sensor()
+
+        # inputs[0] = random.randint(0, 100)
+        # inputs[1] = random.randint(0, 100)
+        # inputs[2] = random.randint(0, 100)
+        # inputs[3] = random.randint(0, 100)
 
         inputs_str[0] = 'Temperature: ' + str(inputs[0])
-        inputs_str[1] = 'Gas mq8: ' + str(inputs[1])
-        inputs_str[2] = 'Gas mq9: ' + str(inputs[2])
+        inputs_str[1] = 'Gas mq135: ' + str(inputs[1])
+        inputs_str[2] = 'Gas mq8: ' + str(inputs[2])
+        inputs_str[3] = 'Gas mq9: ' + str(inputs[3])
 
         loaded = "temp: " + \
-            str(inputs[0]) + " gas8: " + \
-            str(inputs[1]) + " gas9: " + str(inputs[2])
+            str(inputs[0]) + " gas135: " + \
+            str(inputs[1]) + " gas8: " + \
+            str(inputs[2]) + " gas9: " + str(inputs[3])
 
         temperature.append(inputs[0])
-        gas8.append(inputs[1])
-        gas9.append(inputs[2])
+        gas135.append(inputs[1])
+        gas8.append(inputs[2])
+        gas9.append(inputs[3])
         # print inputs
         self.logger.info(loaded)
 
@@ -108,18 +118,25 @@ class MainView(QDialog, QWidget):
         self.lbl_temperature.setText(inputs_str[0])
         self.lbl_temperature.adjustSize()
 
+        if len(gas135) > 100:
+            gas135 = gas135[1:]
+        self.q.setData(gas135)
+
+        self.lbl_gas135.setText(inputs_str[1])
+        self.lbl_gas135.adjustSize()
+
         if len(gas8) > 100:
             gas8 = gas8[1:]
-        self.q.setData(gas8)
+        self.r.setData(gas8)
 
-        self.lbl_gas8.setText(inputs_str[1])
+        self.lbl_gas8.setText(inputs_str[2])
         self.lbl_gas8.adjustSize()
 
         if len(gas9) > 100:
             gas9 = gas9[1:]
-        self.r.setData(gas9)
+        self.s.setData(gas9)
 
-        self.lbl_gas9.setText(inputs_str[2])
+        self.lbl_gas9.setText(inputs_str[3])
         self.lbl_gas9.adjustSize()
 
         # if len(z) > 100:
@@ -129,25 +146,31 @@ class MainView(QDialog, QWidget):
     def plot(self):
         self.build_logger('plot')
         self.win = pg.GraphicsWindow()
-        self.win.setWindowTitle('Scrolling Plots')
+        self.win.setWindowTitle('Drone Datalogger')
 
         temperature = range(10)
+        gas135 = range(10)
         gas8 = range(10)
         gas9 = range(10)
 
         plot_widget_temperature = self.win.addPlot()
         plot_widget_temperature.setRange(xRange=[0, 100])
-        self.p = plot_widget_temperature.plot(temperature, gas8, gas9)
+        self.p = plot_widget_temperature.plot(temperature, gas135, gas8, gas9)
+
+        self.win.nextRow()
+        plot_widget_gas135 = self.win.addPlot()
+        plot_widget_gas135.setRange(xRange=[0, 100])
+        self.q = plot_widget_gas135.plot(temperature, gas135, gas8, gas9)
 
         self.win.nextRow()
         plot_widget_gas8 = self.win.addPlot()
         plot_widget_gas8.setRange(xRange=[0, 100])
-        self.q = plot_widget_gas8.plot(temperature, gas8, gas9)
+        self.r = plot_widget_gas8.plot(temperature, gas135, gas8, gas9)
 
         self.win.nextRow()
         plot_widget_gas9 = self.win.addPlot()
         plot_widget_gas9.setRange(xRange=[0, 100])
-        self.r = plot_widget_gas9.plot(temperature, gas8, gas9)
+        self.s = plot_widget_gas9.plot(temperature, gas135, gas8, gas9)
 
         # win.nextRow()
         # plotWidgetz = win.addPlot()
@@ -169,11 +192,14 @@ class MainView(QDialog, QWidget):
         self.lbl_temperature = QtGui.QLabel(self)
         self.lbl_temperature.move(20, 20)
 
+        self.lbl_gas135 = QtGui.QLabel(self)
+        self.lbl_gas135.move(20, 60)
+
         self.lbl_gas8 = QtGui.QLabel(self)
-        self.lbl_gas8.move(20, 60)
+        self.lbl_gas8.move(20, 100)
 
         self.lbl_gas9 = QtGui.QLabel(self)
-        self.lbl_gas9.move(20, 100)
+        self.lbl_gas9.move(20, 140)
 
         self.btn = QPushButton('Delay Time', self)
         self.btn.move(20, 250)
@@ -236,30 +262,40 @@ class Terminal(object):
     def print_sensor_readings(self):
         while 1:
             self.build_logger('plot')
-            global color, temperature, gas8, gas9, inputs
+            global color, temperature, gas135, gas8, gas9, inputs
 
             inputs[0] = temp_sensor.read_sensor()
-            # inputs[0] = random.randint(23, 26)
-            inputs[1] = random.randint(0, 100)
-            inputs[2] = random.randint(0, 100)
-            # sleep(self.delay_time)
+            inputs[1] = mq135_sensor.read_sensor()
+            inputs[2] = mq8_sensor.read_sensor()
+            inputs[3] = mq9_sensor.read_sensor()
+
+            # inputs[0] = random.randint(0, 100)
+            # inputs[1] = random.randint(0, 100)
+            # inputs[2] = random.randint(0, 100)
+            # inputs[3] = random.randint(0, 100)
 
             inputs_str[0] = 'Temperature: ' + str(inputs[0])
-            inputs_str[1] = 'Gas mq8: ' + str(inputs[1])
-            inputs_str[2] = 'Gas mq9: ' + str(inputs[2])
+            inputs_str[1] = 'Gas mq135: ' + str(inputs[1])
+            inputs_str[2] = 'Gas mq8: ' + str(inputs[2])
+            inputs_str[3] = 'Gas mq9: ' + str(inputs[3])
 
             loaded = "temp: " + \
-                str(inputs[0]) + " gas8: " + \
-                str(inputs[1]) + " gas9: " + str(inputs[2])
+                str(inputs[0]) + " gas135: " + \
+                str(inputs[1]) + " gas8: " + \
+                str(inputs[2]) + " gas9: " + str(inputs[3])
 
             temperature.append(inputs[0])
-            gas8.append(inputs[1])
-            gas9.append(inputs[2])
+            gas135.append(inputs[1])
+            gas8.append(inputs[2])
+            gas9.append(inputs[3])
             # print inputs
             self.logger.info(loaded)
 
             if len(temperature) > 100:
                 temperature = temperature[1:]
+
+            if len(gas135) > 100:
+                gas135 = gas135[1:]
 
             if len(gas8) > 100:
                 gas8 = gas8[1:]

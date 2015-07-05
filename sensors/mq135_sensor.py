@@ -19,9 +19,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from gas_sensor import GasSensor
+from sensor import Sensor
+
+import botbook_mcp3002 as mcp
 
 
-class Mq135Sensor(GasSensor):
+class Mq135Sensor(Sensor):
 
-    """docstring for Mq135_sensor"""
+    """docstring for Mq135Sensor"""
+
+    def __init__(self):
+        Sensor.__init__(self)
+        self.sense_pin1 = 0  # pin 7 rasp
+        self.gain = float(1 / 1000)
+        self.gain_plus = 0
+        self.gaslevel = 0
+
+    def read_sensor(self):
+        self.gaslevel = mcp.readAnalog()
+        return self.gaslevel
