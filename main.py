@@ -86,8 +86,8 @@ class MainView(QDialog, QWidget):
 
         inputs[0] = temp_sensor.read_sensor()
         inputs[1] = mq135_sensor.read_sensor()
-        inputs[2] = mq8_sensor.read_sensor()
-        inputs[3] = mq9_sensor.read_sensor()
+        # inputs[2] = mq8_sensor.read_sensor()
+        # inputs[3] = mq9_sensor.read_sensor()
 
         # inputs[0] = random.randint(0, 100)
         # inputs[1] = random.randint(0, 100)
@@ -162,15 +162,15 @@ class MainView(QDialog, QWidget):
         plot_widget_gas135.setRange(xRange=[0, 100])
         self.q = plot_widget_gas135.plot(temperature, gas135, gas8, gas9)
 
-        self.win.nextRow()
-        plot_widget_gas8 = self.win.addPlot()
-        plot_widget_gas8.setRange(xRange=[0, 100])
-        self.r = plot_widget_gas8.plot(temperature, gas135, gas8, gas9)
+        # self.win.nextRow()
+        # plot_widget_gas8 = self.win.addPlot()
+        # plot_widget_gas8.setRange(xRange=[0, 100])
+        # self.r = plot_widget_gas8.plot(temperature, gas135, gas8, gas9)
 
-        self.win.nextRow()
-        plot_widget_gas9 = self.win.addPlot()
-        plot_widget_gas9.setRange(xRange=[0, 100])
-        self.s = plot_widget_gas9.plot(temperature, gas135, gas8, gas9)
+        # self.win.nextRow()
+        # plot_widget_gas9 = self.win.addPlot()
+        # plot_widget_gas9.setRange(xRange=[0, 100])
+        # self.s = plot_widget_gas9.plot(temperature, gas135, gas8, gas9)
 
         # win.nextRow()
         # plotWidgetz = win.addPlot()
@@ -195,11 +195,11 @@ class MainView(QDialog, QWidget):
         self.lbl_gas135 = QtGui.QLabel(self)
         self.lbl_gas135.move(20, 60)
 
-        self.lbl_gas8 = QtGui.QLabel(self)
-        self.lbl_gas8.move(20, 100)
+        # self.lbl_gas8 = QtGui.QLabel(self)
+        # self.lbl_gas8.move(20, 100)
 
-        self.lbl_gas9 = QtGui.QLabel(self)
-        self.lbl_gas9.move(20, 140)
+        # self.lbl_gas9 = QtGui.QLabel(self)
+        # self.lbl_gas9.move(20, 140)
 
         self.btn = QPushButton('Delay Time', self)
         self.btn.move(20, 250)
@@ -266,8 +266,8 @@ class Terminal(object):
 
             inputs[0] = temp_sensor.read_sensor()
             inputs[1] = mq135_sensor.read_sensor()
-            inputs[2] = mq8_sensor.read_sensor()
-            inputs[3] = mq9_sensor.read_sensor()
+            # inputs[2] = mq8_sensor.read_sensor()
+            # inputs[3] = mq9_sensor.read_sensor()
 
             # inputs[0] = random.randint(0, 100)
             # inputs[1] = random.randint(0, 100)
