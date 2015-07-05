@@ -125,16 +125,16 @@ class MainView(QDialog, QWidget):
         self.lbl_gas135.setText(inputs_str[1])
         self.lbl_gas135.adjustSize()
 
-        if len(gas8) > 100:
-            gas8 = gas8[1:]
-        self.r.setData(gas8)
+        # if len(gas8) > 100:
+        #     gas8 = gas8[1:]
+        # self.r.setData(gas8)
 
-        self.lbl_gas8.setText(inputs_str[2])
-        self.lbl_gas8.adjustSize()
+        # self.lbl_gas8.setText(inputs_str[2])
+        # self.lbl_gas8.adjustSize()
 
-        if len(gas9) > 100:
-            gas9 = gas9[1:]
-        self.s.setData(gas9)
+        # if len(gas9) > 100:
+        #     gas9 = gas9[1:]
+        # self.s.setData(gas9)
 
         self.lbl_gas9.setText(inputs_str[3])
         self.lbl_gas9.adjustSize()
